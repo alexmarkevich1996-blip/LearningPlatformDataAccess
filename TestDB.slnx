@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="EntityFramework_lesson/EntityFramework_lesson.csproj" />
+  <Project Path="stepik_test/stepik_test.csproj" />
+  <Project Path="swagger_test/stepik_API.csproj" />
+  <Project Path="TestDB/stepik.csproj" />
+</Solution>
