@@ -23,5 +23,6 @@ namespace stepik.Models
         [Column("price")]
         public decimal Price { get; set; }
         public CertificateSetting CertificateSetting { get; set; }
+        public List<Unit> Units { get; set; }
     }
 }

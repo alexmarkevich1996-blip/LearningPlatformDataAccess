@@ -11,7 +11,7 @@ namespace stepik_API
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
 
-            builder.Services.AddTransient<UsersService>();
+            builder.Services.AddTransient<stepik.Services.EF.UsersService>();
             builder.Services.AddTransient<CommentsService>();
             builder.Services.AddTransient<CoursesService>();
             builder.Services.AddTransient<CertificatesService>();

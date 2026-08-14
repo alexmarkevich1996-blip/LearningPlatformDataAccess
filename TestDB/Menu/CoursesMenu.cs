@@ -18,9 +18,9 @@ namespace stepik.Menu
 
         public void Display()
         {
-            List<Course> courses = ServiceProvider.coursesService.Get(_user.full_name);
+            List<Course> courses = ServiceProvider.coursesService.Get(_user.FullName);
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\n* Список курсов " + _user.full_name + " *\n\n" +
+            Console.WriteLine("\n* Список курсов " + _user.FullName + " *\n\n" +
                               "Выберите действие (введите число и нажмите Enter):\n" +
                               "0. Назад");
 
@@ -48,7 +48,7 @@ namespace stepik.Menu
         {
             while (true)
             {
-                List<Course> courses = ServiceProvider.coursesService.Get(_user.full_name);
+                List<Course> courses = ServiceProvider.coursesService.Get(_user.FullName);
                 var coursesIds = courses.Select(x => x.Id.ToString()).ToList();
                 string? choice = Console.ReadLine();
 

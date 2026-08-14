@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
+using stepik.Data;
 using stepik.Models;
 using System;
 using System.Collections.Generic;
@@ -13,12 +15,21 @@ namespace stepik.Services.EF
     {
         public List<Course> Get(string fullName)
         {
-            throw new NotImplementedException();
+            var dbContext = new ApplicationDbContext();
+            return dbContext.UserCourses
+                .AsNoTracking()
+                .Where(uc => uc.User.FullName == fullName && uc.User.IsActive)
+                .OrderByDescending(uc => uc.LastViewed)
+                .Select(uc => uc.Course)
+                .ToList();
         }
 
         public int GetTotalCount()
         {
-            throw new NotImplementedException();
+            var dbContext = new ApplicationDbContext();
+            return dbContext.Courses
+                .AsNoTracking()
+                .Count();
         }
     }
 

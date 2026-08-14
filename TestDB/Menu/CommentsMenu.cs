@@ -16,7 +16,7 @@ namespace stepik.Menu
         public void Display()
         {
             List<Comment> comments = ServiceProvider.commentsService.Get(_courseId);
-            List<Course> courses = ServiceProvider.coursesService.Get(_user.full_name);
+            List<Course> courses = ServiceProvider.coursesService.Get(_user.FullName);
             var currentCourse = courses.FirstOrDefault(x => x.Id == _courseId);
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine("\n* Комментарии к курсу " + currentCourse?.Title + " *\n\n" +

@@ -1,15 +1,16 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
+using stepik.Data;
 using stepik.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MySql.Data.MySqlClient;
-using System.Data;
-using stepik.Data;
-using System.Globalization;
 
 namespace stepik.Services.EF
 {
@@ -64,7 +65,7 @@ namespace stepik.Services.EF
         public User? Get(string fullName)
         {
             using var dbContext = new ApplicationDbContext();
-            return dbContext.Users.FirstOrDefault(x => x.full_name == fullName && x.is_active);
+            return dbContext.Users.FirstOrDefault(x => x.FullName == fullName && x.IsActive);
         }
 
         /// <summary>
@@ -82,12 +83,65 @@ namespace stepik.Services.EF
         /// <returns>DataSet</returns>
         public DataSet GetUserRating()
         {
-            throw new NotImplementedException();
+            using ApplicationDbContext dbContext = new();
+
+            var topUsers = dbContext.Users
+                .Where(u => u.IsActive)
+                .AsNoTracking()
+                .OrderByDescending(u => u.Knowledge)
+                .Take(10)
+                .Select(u => new
+                {
+                    u.FullName,
+                    u.Knowledge,
+                    u.Reputation
+                })
+                .ToList();
+
+            var dataTable = new DataTable("UserRating");
+            dataTable.Columns.Add("full_name", typeof(string));
+            dataTable.Columns.Add("knowledge", typeof(int));
+            dataTable.Columns.Add("reputation", typeof(int));
+
+            foreach (var user in topUsers)
+            {
+                dataTable.Rows.Add(user.FullName, user.Knowledge, user.Reputation);
+            }
+
+            var dataSet = new DataSet();
+            dataSet.Tables.Add(dataTable);
+            return dataSet;
         }
 
         public DataSet GetUserSocialInfo(string userName)
         {
-            throw new NotImplementedException();
+            using var dbContext = new ApplicationDbContext();
+
+            var socialInfos = (
+                from u in dbContext.Users
+                join usp in dbContext.UserSocialProviders on u.Id equals usp.UserId
+                join sp in dbContext.SocialProviders on usp.SocialProviderId equals sp.Id
+                where u.FullName == userName
+                orderby sp.Name
+                select new
+                {
+                    sp.Name,
+                    usp.ConnectUrl
+                }
+            ).ToList();
+
+            var dataTable = new DataTable("user_social_providers");
+            dataTable.Columns.Add("name", typeof(string));
+            dataTable.Columns.Add("connect_url", typeof(string));
+
+            foreach (var info in socialInfos)
+            {
+                dataTable.Rows.Add(info.Name, info.ConnectUrl);
+            }
+
+            var dataSet = new DataSet();
+            dataSet.Tables.Add(dataTable);
+            return dataSet;
         }
     }
 }

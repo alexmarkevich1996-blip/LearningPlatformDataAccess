@@ -13,8 +13,7 @@ namespace EntityFramework_lesson
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Phone> Phones { get; set; }
-        public DbSet<Guarantee> Guarantees { get; set; }
-
+        public DbSet<SoftwareUpdate> SoftwareUpdates { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

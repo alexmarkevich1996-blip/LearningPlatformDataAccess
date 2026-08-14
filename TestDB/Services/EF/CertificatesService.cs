@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
+using stepik.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +14,36 @@ namespace stepik.Services.EF
     {
         public DataSet Get(string fullName)
         {
-            throw new NotImplementedException();
+            var dbContext = new ApplicationDbContext();
+
+            var userCertificates = dbContext.Certificates
+                .AsNoTracking()
+                .Include(c => c.Course)
+                .Where(c => c.User.FullName == fullName)
+                .OrderByDescending(c => c.IssueDate)
+                .Select(c => new
+                {
+                    c.Course.Title,
+                    c.IssueDate,
+                    c.Grade
+                })
+                .ToList();
+
+            var dataTable = new DataTable("UserCertificates");
+            dataTable.Columns.Add("title", typeof(string));
+            dataTable.Columns.Add("issue_date", typeof(DateTime));
+            dataTable.Columns.Add("grade", typeof(int));
+
+            foreach (var certificate in userCertificates)
+            {
+                dataTable.Rows.Add(certificate.Title, certificate.IssueDate, certificate.Grade);
+            }
+
+            var dataSet = new DataSet();
+            dataSet.Tables.Add(dataTable);
+            return dataSet;
+
+
         }
     }
 }

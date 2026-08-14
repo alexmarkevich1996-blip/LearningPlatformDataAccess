@@ -9,7 +9,7 @@ namespace stepik.Services
 {
     public static class ServiceProvider
     {
-        public static IUsersService usersService = new ADO.NET.UsersService();
+        public static IUsersService usersService = new EF.UsersService();
         public static ICoursesService coursesService = new ADO.NET.CoursesService();
         public static ICommentsService commentsService = new ADO.NET.CommentsService();
         public static ICertificatesService certificatesService = new ADO.NET.CertificatesService();

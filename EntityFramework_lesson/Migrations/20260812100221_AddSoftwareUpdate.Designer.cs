@@ -4,6 +4,7 @@ using EntityFramework_lesson;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EntityFramework_lesson.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260812100221_AddSoftwareUpdate")]
+    partial class AddSoftwareUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,48 +29,42 @@ namespace EntityFramework_lesson.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("name");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("phone");
+                    b.ToTable("Phones");
                 });
 
             modelBuilder.Entity("EntityFramework_lesson.SoftwareUpdate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("PhoneId")
-                        .HasColumnType("int")
-                        .HasColumnName("phone_id");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("release_date");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Version")
                         .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("version");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PhoneId");
 
-                    b.ToTable("software_update");
+                    b.ToTable("SoftwareUpdates");
                 });
 
             modelBuilder.Entity("EntityFramework_lesson.SoftwareUpdate", b =>

@@ -16,9 +16,9 @@ namespace stepik.Menu
     {
         public void Display()
         {
-            var certificates = ServiceProvider.certificatesService.Get(_user.full_name);
+            var certificates = ServiceProvider.certificatesService.Get(_user.FullName);
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\n* Сертификаты пользователя " + _user.full_name + " *\n\n" +
+            Console.WriteLine("\n* Сертификаты пользователя " + _user.FullName + " *\n\n" +
                               "Выберите действие (введите число и нажмите Enter):\n" +
                               "1. Назад\n");
 

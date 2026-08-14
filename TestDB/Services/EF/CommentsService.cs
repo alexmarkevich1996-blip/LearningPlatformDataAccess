@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Microsoft.EntityFrameworkCore;
 
 namespace stepik.Services.EF
 {
     using MySql.Data.MySqlClient;
+    using stepik.Data;
 
     public class CommentsService : ICommentsService
     {
@@ -20,7 +22,11 @@ namespace stepik.Services.EF
         /// <returns>Список комментариев</returns>
         public List<Comment> Get(int id)
         {
-            throw new NotImplementedException();
+            var dbContext = new ApplicationDbContext();
+            return dbContext.Comments
+                .AsNoTracking()
+                .Where(c => c.Id == id)
+                .ToList();
         }
 
         /// <summary>
