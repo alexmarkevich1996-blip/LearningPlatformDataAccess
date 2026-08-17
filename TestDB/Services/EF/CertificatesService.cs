@@ -14,7 +14,7 @@ namespace stepik.Services.EF
     {
         public DataSet Get(string fullName)
         {
-            var dbContext = new ApplicationDbContext();
+            using ApplicationDbContext dbContext = new();
 
             var userCertificates = dbContext.Certificates
                 .AsNoTracking()

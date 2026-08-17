@@ -22,10 +22,14 @@ namespace stepik.Services.EF
         /// <returns>Список комментариев</returns>
         public List<Comment> Get(int id)
         {
-            var dbContext = new ApplicationDbContext();
+            using ApplicationDbContext dbContext = new();
             return dbContext.Comments
                 .AsNoTracking()
-                .Where(c => c.Id == id)
+                .Where(c =>
+                        c.Step.Lesson.UnitLessons
+                            .Any(ul => ul.Unit.Course.Id == id)
+                        && c.ReplyCommentId == null)
+                .OrderByDescending(c => c.Time)
                 .ToList();
         }
 
@@ -36,7 +40,37 @@ namespace stepik.Services.EF
         /// <returns>Удалось ли удалить комментарий</returns>
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            using var dbContext = new ApplicationDbContext();
+
+
+            try
+            {
+                var courseReviews = dbContext.CourseReviews
+                    .Where(cr => cr.CommentId == id)
+                    .ToList();
+
+                var replyComments = dbContext.Comments
+                    .Where(c => c.ReplyCommentId == id)
+                    .ToList();
+
+                var comment = dbContext.Comments.FirstOrDefault(c => c.Id == id);
+
+                dbContext.CourseReviews.RemoveRange(courseReviews);
+                dbContext.Comments.RemoveRange(replyComments);
+
+                if(comment != null)
+                {
+                    dbContext.Comments.Remove(comment);
+                }
+                dbContext.SaveChanges();
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
     }
 }

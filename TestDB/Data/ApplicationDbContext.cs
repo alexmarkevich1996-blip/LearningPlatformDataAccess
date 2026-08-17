@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using stepik.Data.Configurations;
 using stepik.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,7 +28,7 @@ namespace stepik.Data
         public DbSet<Step> Steps { get; set; }
         public DbSet<Progress> Progresses { get; set; }
         public DbSet<Comment> Comments { get; set;  }
-        public DbSet<CourseReview> CourseReview { get; set; }
+        public DbSet<CourseReview> CourseReviews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -35,6 +37,11 @@ namespace stepik.Data
                 .Build();
             var connectionString = config.GetConnectionString("DefaultConnection");
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
